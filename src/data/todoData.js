@@ -1,4 +1,4 @@
-export const mockupTodoData = [
+export const mockTodoData = [
     {
         id: 1,
         isDone: false,
