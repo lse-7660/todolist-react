@@ -1,15 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TodoHd from './TodoHd';
 import TodoEditor from './TodoEditor';
 import TodoList from './TodoList';
-import { mockTodoData } from '@/data/todoData';
 
 const Todo = () => {
-    const [todos, setTodos] = useState(mockTodoData);
+    const [todos, setTodos] = useState([]);
 
-    // 할 일 추가하는 함수
+    // 마운트 시
+    useEffect(() => {
+        // 로컬 스토리지에서 데이터를 가져와서
+        const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+
+        setTodos(savedTodos);
+    }, []);
+
+    // todos 업데이트 시
+    useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(todos));
+    }, [todos]);
+
     const addTodo = (task) => {
         const newTodo = {
             id: todos.length + 1,
@@ -20,7 +31,6 @@ const Todo = () => {
         setTodos([newTodo, ...todos]);
     };
 
-    // 완료 표시 함수
     const onUpdate = (id) => {
         setTodos(
             todos.map((todo) => {
@@ -29,7 +39,6 @@ const Todo = () => {
         );
     };
 
-    // 할 일 삭제 함수
     const onDelete = (id) => {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
